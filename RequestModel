@@ -1,0 +1,9 @@
+{ 
+    "$schema": "http://json-schema.org/draft-04/schema#", 
+    "title": "CreateCardInfo", 
+    "type": "object", 
+    "properties": { 
+       "cardNo": { "type":"string" },
+       "cardHolder": {"type":"string"}
+    }
+}
