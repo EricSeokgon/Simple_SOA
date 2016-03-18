@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>Mobile Credit Payment Pte Ltd.</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+		<script src="./creditcard.js"></script>
+		<script src="./jquery.mask.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+		<style type="text/css">
+		body {
+			padding-top: 40px;
+			padding-bottom: 40px;
+			background-color: #eee;
+		}
+
+		.form {
+			max-width: 500px;
+			padding: 15px;
+			margin: 0 auto;
+		}
+		.form .control-label {
+			font-size: 1.0em;
+		}
+		.form .form-control {
+			font-size: 1.2em;
+		}
+		.form .form-control:focus {
+			z-index: 2;
+		}
+		.form input[type="cardNo"] {
+			margin-bottom: -1px;
+			border-bottom-right-radius: 0;
+			border-bottom-left-radius: 0;
+		}
+		.form input[type="cardHolder"] {
+			margin-bottom: 10px;
+			border-top-left-radius: 0;
+			border-top-right-radius: 0;
+		}
+		.form .form-error {
+			padding-top: 5px;
+		}
+
+		.panel-title {
+			text-align: center;
+			font-size: 1.5em;
+		}
+		</style>
+	</head>
+	<body>
+		<div class="container form">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h2 class="panel-title">MasterCard Rebate</h2>
+				</div>
+				<div class="panel-body">
+					<div class="form-horizontal">
+						<div class="form-group">
+							<label for="inputCardNo" class="col-sm-4 control-label">Card Number</label>
+							<div class="col-sm-6">
+								<input type="text" id="inputCardNo" name="cardNo" class="form-control" aria-describedby="sizing-addon1" placeholder="Enter Card Number" maxlength="20" pattern="[0-9]" autocomplete="off" required autofocus>
+							</div>
+							<div class="form-error" id="errorCardNo"></div>
+						</div>
+						<div class="form-group">
+							<label for="inputCardHolder" class="col-sm-4 control-label">Holder Name</label>
+							<div class="col-sm-6">
+								<input type="text" id="inputCardHolder" name="cardHolder" class="form-control" aria-describedby="sizing-addon1" placeholder="Name On The Card" autocomplete="off" maxlength="20" required>
+							</div>
+						</div>
+						<br>
+						<div class="form-group">
+							<div class="col-sm-offset-3 col-sm-6">
+								<button class="btn btn-lg btn-primary btn-block" type="button" id="submitGet">Submit(GET)</button>
+								<button class="btn btn-lg btn-primary btn-block" type="button" id="submitPost">Submit(POST)</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script>
+		$(document).ready(function() {
+			var url = "https://s5who8hbnb.execute-api.us-east-1.amazonaws.com/dev/InsertCardInfo";
+			var cardType = "Visa";
+			var cardNo;
+			var cardHolder = $("#inputCardHolder").val();
+
+			$("#submitGet").click(function() {
+				console.log("cardNo: " +cardNo);
+
+				var formTag =	"<form action='"+url+"' method='get'>" +
+								"<input type='hidden' name='cardNo' value='"+cardNo+"'>" +
+								"<input type='hidden' name='cardHolder' value='"+cardHolder+"'>" +
+								"</form>";
+
+				if ( checkCreditCard(cardNo, cardType) ) {
+					$(formTag).submit();
+				}
+			});
+
+			$("#submitPost").click(function() {
+				console.log("cardNo: " +cardNo);
+
+				var formTag =	"<form action='"+url+"' method='post'>" +
+								"<input type='hidden' name='cardNo' value='"+cardNo+"'>" +
+								"<input type='hidden' name='cardHolder' value='"+cardHolder+"'>" +
+								"</form>";
+
+				if ( checkCreditCard(cardNo, cardType) ) {
+					$(formTag).submit();
+				}
+			});
+
+			$("#inputCardNo").keyup(function(event) {
+				cardNo = $(this).val().replace(/[-]/gi, "");
+
+				if ( cardNo.length == 0 ) {
+					$("#errorCardNo").html("");
+				} else if ( cardNo.length > 0 && cardNo.length < 16) {
+					$("#errorCardNo").html("<span class='label label-warning' for='inputCardNo'>Short</span>");
+				} else {
+					if ( checkCreditCard(cardNo, cardType) ) {
+						$("#errorCardNo").html("<span class='label label-success' for='inputCardNo'>Valid</span>");
+					} else {
+						$("#errorCardNo").html("<span class='label label-danger' for='inputCardNo'>Invalid</span>");
+					}
+				}
+			});
+
+			$("#inputCardNo").mask('0000-0000-0000-0000');
+		});
+	</script>
+</html>
