@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS `CARDINFO` (
+	`id` int(16) NOT NULL AUTO_INCREMENT,
+	`cardNo` varchar(20) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+	`cardHolder` varchar(100) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+	PRIMARY KEY (`cardNo`),
+	KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
