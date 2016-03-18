@@ -74,8 +74,8 @@
 						<br>
 						<div class="form-group">
 							<div class="col-sm-offset-3 col-sm-6">
-								<button class="btn btn-lg btn-primary btn-block" type="button" id="submitGet">Submit(GET)</button>
 								<button class="btn btn-lg btn-primary btn-block" type="button" id="submitPost">Submit(POST)</button>
+								<button class="btn btn-lg btn-primary btn-block" type="button" id="submitGet">Submit(GET)</button>
 							</div>
 						</div>
 					</div>
@@ -88,10 +88,10 @@
 			var url = "https://s5who8hbnb.execute-api.us-east-1.amazonaws.com/dev/InsertCardInfo";
 			var cardType = "Visa";
 			var cardNo;
-			var cardHolder = $("#inputCardHolder").val();
 
 			$("#submitGet").click(function() {
 				console.log("cardNo: " +cardNo);
+				var cardHolder = $("#inputCardHolder").val();
 
 				var formTag =	"<form action='"+url+"' method='get'>" +
 								"<input type='hidden' name='cardNo' value='"+cardNo+"'>" +
@@ -105,6 +105,7 @@
 
 			$("#submitPost").click(function() {
 				console.log("cardNo: " +cardNo);
+				var cardHolder = $("#inputCardHolder").val();
 
 				var formTag =	"<form action='"+url+"' method='post'>" +
 								"<input type='hidden' name='cardNo' value='"+cardNo+"'>" +
